@@ -6,9 +6,7 @@ type (
 	}
 
 	Database struct {
-		Host       string
-		Port       string
-		User       string
+		Url        string
 		Password   string
 		DB         string
 		Collection string
