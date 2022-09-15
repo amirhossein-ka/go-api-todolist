@@ -35,13 +35,13 @@
 you can run this app using 2 methods:
 
 1. Manual
-  - clone this repo, rename `env.env` to `.env`, fill fields in `.env` file as desired
-  - run `go build .`
-  - run binary named `./go-api-todolist`
+    1. clone this repo, rename `env.env` to `.env`, fill fields in `.env` file as desired
+    2. run `go build .`
+    3. run binary named `./go-api-todolist`
  
 2. Docker compose (not implemented yet)
-  - clone this repo.
-  - run `docker-compose up -d` and wait for app to run on localhost:8000
+    1. clone this repo.
+    2. run `docker-compose up -d` and wait for app to run on localhost:8000
 
 ## Tools
 
