@@ -13,13 +13,13 @@ import (
 func (h *handler) create(w http.ResponseWriter, r *http.Request) {
 	var t models.Todo
 	if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
-		writeJson(w, http.StatusBadRequest, map[string]any{"error": err.Error()})
+		writeJson(w, http.StatusBadRequest, map[string]any{"status": false, "error": err.Error()})
 		return
 	}
 
 	id, err := h.service.CreateTask(r.Context(), t)
 	if err != nil {
-		writeJson(w, http.StatusInternalServerError, map[string]any{"error": err.Error()})
+		writeJson(w, http.StatusInternalServerError, map[string]any{"status": false, "error": err.Error()})
 		return
 	}
 
@@ -39,7 +39,7 @@ func (h *handler) getOne(w http.ResponseWriter, r *http.Request) {
 			code = http.StatusInternalServerError
 		}
 
-		writeJson(w, code, map[string]any{"error": err.Error()})
+		writeJson(w, code, map[string]any{"status": false, "error": err.Error()})
 		return
 	}
 
@@ -57,7 +57,7 @@ func (h *handler) getAll(w http.ResponseWriter, r *http.Request) {
 			code = http.StatusInternalServerError
 		}
 
-		writeJson(w, code, map[string]any{"error": err.Error()})
+		writeJson(w, code, map[string]any{"status": false, "error": err.Error()})
 		return
 	}
 
@@ -68,12 +68,12 @@ func (h *handler) update(w http.ResponseWriter, r *http.Request) {
 	v := mux.Vars(r)
 	id, ok := v["_id"]
 	if !ok {
-		writeJson(w, http.StatusBadRequest, map[string]any{"error": fmt.Errorf("_id parameter not found.")})
+		writeJson(w, http.StatusBadRequest, map[string]any{"status": false, "error": fmt.Errorf("_id parameter not found.")})
 		return
 	}
 	var task models.Todo
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
-		writeJson(w, http.StatusBadRequest, map[string]any{"error": err.Error()})
+		writeJson(w, http.StatusBadRequest, map[string]any{"status": false, "error": err.Error()})
 		return
 	}
 
@@ -86,7 +86,7 @@ func (h *handler) update(w http.ResponseWriter, r *http.Request) {
 			code = http.StatusInternalServerError
 		}
 
-		writeJson(w, code, map[string]any{"error": err.Error()})
+		writeJson(w, code, map[string]any{"status": false, "error": err.Error()})
 		return
 	}
 
