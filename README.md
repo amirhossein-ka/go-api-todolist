@@ -39,7 +39,7 @@ you can run this app using 2 methods:
     2. run `go build .`
     3. run binary named `./go-api-todolist`
  
-2. Docker compose (not implemented yet)
+2. Docker compose 
     1. clone this repo.
     2. run `docker-compose up -d` and wait for app to run on localhost:8000
 
