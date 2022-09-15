@@ -14,7 +14,7 @@
 
 - Insert a new task
   - Route: `host:8000/api/v1/craete/`
-  - Desription: send a json request with these fields:
+  - Desription: send a JSON request with these fields:
   ```json
     {
       "name": "name of task",
@@ -31,7 +31,7 @@
 
 - Update/Edit a task
   - Route: `host:8000/api/v1/update/{_id}`
-  - Description: replace {_id} with desired task id and send a json in body same as create route.
+  - Description: replace {_id} with desired task id and send a JSON in body same as create route.
   - Method: PUT
 
 ## How to run
