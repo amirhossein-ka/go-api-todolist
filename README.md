@@ -3,49 +3,49 @@
 ## Routes
 
 - Get a single task
-  - route: `host:8000/api/v1/get/{_id}/`
-  - description: replace {_id} with mongodb document id
-  - method: GET
+  - Route: `host:8000/api/v1/get/{_id}/`
+  - Description: replace {_id} with mongodb document id
+  - Method: GET
 
 - Get all tasks
-  - route: `host:8000/api/v1/get/`
-  - description: return a list of tasks
-  - method: GET
+  - Route: `host:8000/api/v1/get/`
+  - Description: return a list of tasks
+  - Method: GET
 
 - Insert a new task
-  - route: `host:8000/api/v1/craete/`
-  - desription: send a json request with these fields:
+  - Route: `host:8000/api/v1/craete/`
+  - Desription: send a json request with these fields:
   ```json
     {
       "name": "name of task",
       "description": "info about task",
-      "status": true or false
+      "status": true
     }
   ```
   - method: POST
 
 - Delete a task
-  - route: `host:8000/api/v1/delete/{_id}/`
-  - description: replace {_id} with desired task id returned in create response
-  - method: DELETE
+  - Route: `host:8000/api/v1/delete/{_id}/`
+  - Description: replace {_id} with desired task id returned in create response
+  - Method: DELETE
 
 - Update/Edit a task
-  - route: `host:8000/api/v1/update/{_id}`
-  - description: replace {_id} with desired task id and send a json in body same as create route.
-  - method: PUT
+  - Route: `host:8000/api/v1/update/{_id}`
+  - Description: replace {_id} with desired task id and send a json in body same as create route.
+  - Method: PUT
 
 ## How to run
 
 You can run this app using 2 methods:
 
 1. Manual
-    1. clone this repo, rename `env.env` to `.env`, fill fields in `.env` file as desired
-    2. run `go build .`
-    3. run binary named `./go-api-todolist`
+    1. Clone this repo, rename `env.env` to `.env`, fill fields in `.env` file as desired
+    2. Run `go build .`
+    3. Run binary named `./go-api-todolist`
  
 2. Docker compose 
-    1. clone this repo.
-    2. run `docker-compose up -d` and wait for app to run on localhost:8000
+    1. Clone this repo.
+    2. Run `docker-compose up -d` and wait for app to run on `localhost:8000`
 
 ## Tools
 
