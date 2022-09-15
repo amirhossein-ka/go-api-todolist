@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"go-api-todolist/config"
+	"go-api-todolist/repository"
 	"net/url"
 	"strings"
 	"time"
@@ -16,7 +17,7 @@ type mongodb struct {
 	collection *mongo.Collection
 }
 
-func New(ctx context.Context, cfg *config.Database) (*mongodb, error) {
+func New(ctx context.Context, cfg *config.Database) (repository.MongoDB, error) {
 	ctx, cancel := NewMongoContext(ctx)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri(cfg)))
