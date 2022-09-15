@@ -19,7 +19,7 @@
     {
       "name": "name of task",
       "description": "info about task",
-      "status": true // or false
+      "status": true or false
     }
   ```
   - method: POST
