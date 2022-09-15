@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  mongo:
+    container_name: "mongo"
+    # because my cpu does not support avx, you can change it to higher version
+    image: "mongo:4.4"
+    env_file:
+      - ./env.env
+    networks:
+      sysnet:
+        aliases:
+          - mongo
+  app:
+    build:
+      context: .
+      target: runner
+    container_name: "todo_app"
+    depends_on:
+      - mongo
+    ports:
+      - 8000:8000
+    networks:
+      - sysnet
+    env_file:
+      - ./env.env
+
+
+networks:
+  sysnet:
+    driver: bridge
+
+
