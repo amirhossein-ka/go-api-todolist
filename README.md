@@ -14,7 +14,7 @@
 
 - Insert a new task
   - Route: `host:8000/api/v1/craete/`
-  - Desription: send a JSON request with these fields:
+  - Description: send a JSON request with these fields:
   ```json
     {
       "name": "name of task",
