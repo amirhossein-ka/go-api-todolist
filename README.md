@@ -1,4 +1,4 @@
-# go-api-todolist
+# GO API Todo List
 
 ## Routes
 
@@ -6,10 +6,12 @@
   - route: `host:8000/api/v1/get/{_id}/`
   - description: replace {_id} with mongodb document id
   - method: GET
+
 - Get all tasks
   - route: `host:8000/api/v1/get/`
   - description: return a list of tasks
   - method: GET
+
 - Insert a new task
   - route: `host:8000/api/v1/craete/`
   - desription: send a json request with these fields:
@@ -21,10 +23,12 @@
     }
   ```
   - method: POST
+
 - Delete a task
   - route: `host:8000/api/v1/delete/{_id}/`
   - description: replace {_id} with desired task id returned in create response
   - method: DELETE
+
 - Update/Edit a task
   - route: `host:8000/api/v1/update/{_id}`
   - description: replace {_id} with desired task id and send a json in body same as create route.
@@ -32,7 +36,7 @@
 
 ## How to run
 
-you can run this app using 2 methods:
+You can run this app using 2 methods:
 
 1. Manual
     1. clone this repo, rename `env.env` to `.env`, fill fields in `.env` file as desired
@@ -49,4 +53,7 @@ you can run this app using 2 methods:
 - MUX: https://github.com/gorilla/mux
 - Mongo: https://go.mongodb.org/mongo-driver
 
+## Authors
 
+- Amir
+- Max Base
