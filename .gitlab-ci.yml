@@ -10,7 +10,8 @@ format-job:
     paths:
       - /go/pkg/mod
   script:
-    - go env -w GOPROXY=direct
+    - export HTTP_PROXY=$SOCKS_PROXY
+    - export HTTPS_PROXY=$SOCKS_PROXY
     - go fmt $(go list ./...)
     - go vet $(go list ./...)
   allow_failure: false
