@@ -1,0 +1,22 @@
+build:
+  stage: build
+  script:
+    - echo "This is my build script"
+
+
+test:
+  stage: test
+  script:
+    - echo "Testing the build....."
+
+long_test:
+  stage: test
+  script: 
+    - echo "TESTING FOR 10 sec"
+    - sleep 10
+
+deploy:
+  stage: deploy
+  script:
+    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+  environment: production
