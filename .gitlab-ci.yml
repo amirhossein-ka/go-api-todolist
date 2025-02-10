@@ -5,6 +5,10 @@ stages:
 format-job:
   stage: format
   image: golang:1.23-alpine
+  cache:
+    key: go-mod
+    paths:
+      - /go/pkg/mod
   script:
     - go fmt $(go list ./...)
     - go vet $(go list ./...)
