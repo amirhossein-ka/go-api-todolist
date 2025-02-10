@@ -20,3 +20,13 @@ build-job:
   stage: build
   script:
     - echo "Hello, $GITLAB_USER_LOGIN!"
+    - echo $PWD
+    - docker build -t $CI_PROJECT_NAME:latest .
+    - docker save -o /$CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
+  artifacts:
+    untracked: false
+    when: on_success
+    access: all
+    expire_in: 30 days
+    paths:
+      - /$CI_RPOJECT_NAME.tar.gz
