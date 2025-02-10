@@ -20,16 +20,13 @@ build-job:
   stage: build
   script:
     - echo "Hello, $CI_PROJECT_NAME!"
-    - mkdir /image
     - export HTTP_PROXY=$SOCKS_PROXY
     - export HTTPS_PROXY=$SOCKS_PROXY
     - docker build --build-arg HTTP_PROXY=$SOCKS_PROXY --build-arg HTTPS_PROXY=$SOCKS_PROXY -t $CI_PROJECT_NAME:latest .
-    - docker save -o /image/$CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
+    - docker save -o $CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
     - ls /image
   artifacts:
     untracked: false
     when: on_success
     access: all
     expire_in: 30 days
-    paths:
-      - /image
