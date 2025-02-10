@@ -10,8 +10,7 @@ format-job:
     paths:
       - /go/pkg/mod
   script:
-    - go env -w GO111MODULE=on
-    - go env -w GOPROXY=https://goproxy.cn,direct
+    - go env -w GOPROXY=direct
     - go fmt $(go list ./...)
     - go vet $(go list ./...)
   allow_failure: false
