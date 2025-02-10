@@ -21,14 +21,15 @@ build-job:
   script:
     - echo "Hello, $GITLAB_USER_LOGIN!"
     - echo $PWD
+    - mkdir /image
     - export HTTP_PROXY=$SOCKS_PROXY
     - export HTTPS_PROXY=$SOCKS_PROXY
     - docker build --build-arg HTTP_PROXY=$SOCKS_PROXY --build-arg HTTPS_PROXY=$SOCKS_PROXY -t $CI_PROJECT_NAME:latest .
-    - docker save -o /$CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
+    - docker save -o /image/$CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
   artifacts:
     untracked: false
     when: on_success
     access: all
     expire_in: 30 days
     paths:
-      - /$CI_RPOJECT_NAME.tar.gz
+      - /image
