@@ -1,4 +1,6 @@
 FROM golang:1.19-alpine AS builder
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
 
 WORKDIR /app/
 
