@@ -15,6 +15,7 @@ format-job:
     - go vet $(go list ./...)
   allow_failure: false
 
+
 build-job:
   stage: build
   script:
