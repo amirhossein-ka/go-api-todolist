@@ -24,7 +24,7 @@ format-job:
 build-job:
   stage: build
   script:
-    - echo "Hello, $CI_REGISTRY!"
+    - echo "Hello, $CI_REGISTRY! --- $CI_JOB_TOKEN --- $CI_REGISTRY_USER"
     - export HTTP_PROXY=$SOCKS_PROXY
     - export HTTPS_PROXY=$SOCKS_PROXY
     - echo $CI_JOB_TOKEN | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
