@@ -12,6 +12,7 @@ type Service interface {
 	CreateTask(ctx context.Context, t models.Todo) (string, error)
 	DeleteTask(ctx context.Context, id string) error
 	UpdateTask(ctx context.Context, id string, t models.Todo) error
+	Ping(ctx context.Context) error
 }
 
 type service_impl struct {

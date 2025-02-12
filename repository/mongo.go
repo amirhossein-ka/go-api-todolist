@@ -12,5 +12,6 @@ type (
 		ReadAll(ctx context.Context) ([]*models.Todo, error)
 		Update(ctx context.Context, id string, t models.Todo) error
 		Delete(ctx context.Context, id string) error
+		Ping(ctx context.Context) error
 	}
 )

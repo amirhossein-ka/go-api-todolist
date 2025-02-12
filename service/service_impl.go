@@ -29,3 +29,7 @@ func (s *service_impl) UpdateTask(
 ) error {
 	return s.mongodb.Update(ctx, id, t)
 }
+
+func (s *service_impl) Ping(ctx context.Context) error {
+	return s.mongodb.Ping(ctx)
+}

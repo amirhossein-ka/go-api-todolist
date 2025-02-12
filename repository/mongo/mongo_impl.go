@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	ErrNoDocument error = errors.New("no document with given id found")
-	ErrInvalidId  error = errors.New("given id is invalid")
+	ErrNoDocument = errors.New("no document with given id found")
+	ErrInvalidId  = errors.New("given id is invalid")
 )
 
 func (m *mongodb) Create(ctx context.Context, t models.Todo) (string, error) {
@@ -37,7 +37,7 @@ func (m *mongodb) ReadOne(ctx context.Context, id string) (*models.Todo, error) 
 	filter := bson.D{{Key: "_id", Value: objID}}
 	var result models.Todo
 	if err := m.collection.FindOne(ctx, filter).Decode(&result); err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, ErrNoDocument
 		}
 		return nil, err
@@ -54,7 +54,7 @@ func (m *mongodb) ReadAll(ctx context.Context) ([]*models.Todo, error) {
 
 	cur, err := m.collection.Find(ctx, bson.D{{}})
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, ErrNoDocument
 		}
 		return nil, err
@@ -93,13 +93,17 @@ func (m *mongodb) Update(ctx context.Context, id string, t models.Todo) error {
 	}
 	_, err = m.collection.UpdateOne(ctx, filter, update)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return ErrNoDocument
 		}
 		return err
 	}
 
 	return nil
+}
+
+func (m *mongodb) Ping(ctx context.Context) error {
+	return m.collection.Database().Client().Ping(ctx, nil)
 }
 
 func (m *mongodb) Delete(ctx context.Context, id string) error {
@@ -114,7 +118,7 @@ func (m *mongodb) Delete(ctx context.Context, id string) error {
 
 	_, err = m.collection.DeleteOne(ctx, filter)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return ErrNoDocument
 		}
 

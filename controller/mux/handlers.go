@@ -2,6 +2,7 @@ package mux
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go-api-todolist/models"
 	"go-api-todolist/repository/mongo"
@@ -33,7 +34,7 @@ func (h *handler) getOne(w http.ResponseWriter, r *http.Request) {
 	task, err := h.service.GetTask(r.Context(), id)
 	if err != nil {
 		var code int
-		if err == mongo.ErrNoDocument {
+		if errors.Is(err, mongo.ErrNoDocument) {
 			code = http.StatusNotFound
 		} else {
 			code = http.StatusInternalServerError
@@ -51,7 +52,7 @@ func (h *handler) getAll(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		var code int
-		if err == mongo.ErrNoDocument {
+		if errors.Is(err, mongo.ErrNoDocument) {
 			code = http.StatusNotFound
 		} else {
 			code = http.StatusInternalServerError
@@ -68,7 +69,7 @@ func (h *handler) update(w http.ResponseWriter, r *http.Request) {
 	v := mux.Vars(r)
 	id, ok := v["_id"]
 	if !ok {
-		writeJson(w, http.StatusBadRequest, map[string]any{"status": false, "error": fmt.Errorf("_id parameter not found.")})
+		writeJson(w, http.StatusBadRequest, map[string]any{"status": false, "error": fmt.Errorf("_id parameter not found")})
 		return
 	}
 	var task models.Todo
@@ -80,7 +81,7 @@ func (h *handler) update(w http.ResponseWriter, r *http.Request) {
 	err := h.service.UpdateTask(r.Context(), id, task)
 	if err != nil {
 		var code int
-		if err == mongo.ErrNoDocument {
+		if errors.Is(err, mongo.ErrNoDocument) {
 			code = http.StatusNotFound
 		} else {
 			code = http.StatusInternalServerError
@@ -97,14 +98,14 @@ func (h *handler) delete(w http.ResponseWriter, r *http.Request) {
 	v := mux.Vars(r)
 	id, ok := v["_id"]
 	if !ok {
-		writeJson(w, http.StatusBadRequest, map[string]any{"error": fmt.Errorf("_id parameter not found.")})
+		writeJson(w, http.StatusBadRequest, map[string]any{"error": fmt.Errorf("_id parameter not found")})
 		return
 	}
 
 	err := h.service.DeleteTask(r.Context(), id)
 	if err != nil {
 		var code int
-		if err == mongo.ErrNoDocument {
+		if errors.Is(err, mongo.ErrNoDocument) {
 			code = http.StatusNotFound
 		} else {
 			code = http.StatusInternalServerError
@@ -115,4 +116,12 @@ func (h *handler) delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJson(w, http.StatusOK, map[string]any{"status": "deleted"})
+}
+
+func (h *handler) health(w http.ResponseWriter, r *http.Request) {
+	if err := h.service.Ping(r.Context()); err != nil {
+		writeJson(w, http.StatusInternalServerError, map[string]any{"status": false, "error": err.Error()})
+		return
+	}
+	writeJson(w, http.StatusOK, map[string]any{"status": "ok"})
 }
