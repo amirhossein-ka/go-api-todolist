@@ -2,6 +2,10 @@ stages:
   - format
   - build
 
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
+
 format-job:
   stage: format
   image: golang:1.23-alpine
@@ -20,10 +24,10 @@ format-job:
 build-job:
   stage: build
   script:
-    - echo "Hello, $CI_PROJECT_NAME!"
+    - echo "Hello, $CI_REGISTRY!"
     - export HTTP_PROXY=$SOCKS_PROXY
     - export HTTPS_PROXY=$SOCKS_PROXY
-    - docker build --build-arg HTTP_PROXY=$SOCKS_PROXY --build-arg HTTPS_PROXY=$SOCKS_PROXY -t $CI_PROJECT_NAME:latest .
+    - docker build --build-arg HTTP_PROXY=$SOCKS_PROXY --build-arg HTTPS_PROXY=$SOCKS_PROXY -t $TAG_COMMIT -t TAG_LATEST .
     - docker save -o $CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
   artifacts:
     when: on_success
