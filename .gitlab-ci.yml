@@ -29,10 +29,5 @@ build-job:
     - export HTTPS_PROXY=$SOCKS_PROXY
     - echo $CI_JOB_TOKEN | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - docker build --build-arg HTTP_PROXY=$SOCKS_PROXY --build-arg HTTPS_PROXY=$SOCKS_PROXY -t $TAG_COMMIT -t $TAG_LATEST .
-    - docker save -o $CI_PROJECT_NAME.tar.gz $CI_PROJECT_NAME:latest
-  artifacts:
-    when: on_success
-    access: all
-    expire_in: 30 days
-    paths:
-      - "*.tar.gz"
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
