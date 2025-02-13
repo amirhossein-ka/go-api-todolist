@@ -1,3 +1,13 @@
+workflow:
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /skip ci/'
+      when: never
+    - if: '$CI_COMMIT_BRANCH = "main"'
+    - changes:
+      - "**/*.yaml"
+      - "**/*.yml"
+      when: never
+
 stages:
   - format
   - build
@@ -20,11 +30,9 @@ format-job:
     - go vet $(go list ./...)
   allow_failure: false
 
-
 build-job:
   stage: build
   script:
-    - echo "Hello, $CI_REGISTRY! --- $CI_JOB_TOKEN --- $CI_REGISTRY_USER, $TAG_LATEST"
     - export HTTP_PROXY=$SOCKS_PROXY
     - export HTTPS_PROXY=$SOCKS_PROXY
     - echo $CI_JOB_TOKEN | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
