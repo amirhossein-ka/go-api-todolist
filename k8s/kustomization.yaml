@@ -1,0 +1,7 @@
+resources:
+  - app-config.yaml
+  - app-svc.yaml
+  - mongo-configmap.yaml
+  - mongo-svc.yaml
+  - mongo-statefulset.yaml
+  - app.yaml
