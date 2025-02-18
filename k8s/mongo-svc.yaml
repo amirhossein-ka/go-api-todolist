@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: todo
+    type: db
+  name: mongo-svc
+  namespace: todo
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 27017
+      targetPort: 27017

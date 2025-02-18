@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: todo
+    type: db
+  name: mongo
+  namespace: todo
+spec:
+  selector:
+    matchLabels:
+      app: todo
+      type: db
+  serviceName: mongodb
+  template:
+    spec:
+      imagePullSecrets:
+        - name: git.me.com
+      containers:
+        - name: mongo
+          image: git.me.com:5050/mongo:latest
+          command:
+            - mongod
+            - --replSet
+            - rs0
+          ports:
+            - containerPort: 27017
+              name: mongo-port
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - db.serverStatus()
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+        - name: mongo-init
+          image: git.me.com:5050/mongo:latest
+          command:
+            - bash
+            - /config/init-mongo.sh
+          env:
+            - name: NAMESPACE
+              value: default
+            - name: SERVICE_NAME
+              value: mongo
+            - name: REPLICA_SET_NAME
+              value: rs0
+            - name: EXPECTED_MEMBERS
+              value: "2"
+          volumeMounts:
+            - mountPath: /config
+              name: init
+      volumes:
+        - name: init
+          configMap:
+            name: mongo-init
+  volumeClaimTemplates:
+    - metadata:
+        namespace: todo
+        name: mongo-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: openebs-hostpath
+        resources:
+          requests:
+            storage: 1Gi
