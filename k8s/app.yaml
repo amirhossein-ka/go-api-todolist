@@ -99,9 +99,12 @@ spec:
   serviceName: mongodb
   template:
     spec:
+      imagePullSecrets:
+        - name: git.me.com
       containers:
         - name: mongo
           image: git.me.com:5050/mongo:latest
+
           command:
             - mongod
             - --replSet
@@ -170,9 +173,11 @@ spec:
         app: todo
         type: api
     spec:
+      imagePullSecrets:
+        - name: git.me.com
       containers:
         - name: todo-api
-          image: go-api-todolist
+          image: git.me.com:5050/cicd/go-api-todolist/main
           livenessProbe:
             httpGet:
               port: 8000
