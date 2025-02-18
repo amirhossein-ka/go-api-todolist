@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: todo-app-config
+  name: app-config
   labels:
     app: todo
+  namespace: todo
 
 data:
-  DATABASE_URL: "mongodb://root:root_Password@todo-mongo-0.mongo:27017,todo-mongo-1.mongo:27017,todo-mongo-2.mongo:27017/?replicaSet=rs0&retryWrites=true&w=majority"
+  DATABASE_URL: "mongodb://root:root_Password@mongo-0.mongodb:27017,mongo-1.mongodb:27017/?replicaSet=rs0&retryWrites=true&w=majority"
   DATABASE_DB: "todo"
   DATABASE_COLLECTION: "todo"

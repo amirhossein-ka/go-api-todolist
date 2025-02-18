@@ -2,52 +2,85 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    app: todo
+    app: mongodb
     type: db
   name: mongo
   namespace: todo
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      app: todo
+      app: mongodb
       type: db
   serviceName: mongodb
   template:
+    metadata:
+      labels:
+        app: mongodb
+        type: db
     spec:
       imagePullSecrets:
         - name: git.me.com
       containers:
         - name: mongo
-          image: git.me.com:5050/mongo:latest
+          image: git.me.com:5050/images/mongo:latest
           command:
             - mongod
             - --replSet
             - rs0
+            - --bind_ip_all
           ports:
             - containerPort: 27017
               name: mongo-port
           livenessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
                 - --eval
                 - db.serverStatus()
             initialDelaySeconds: 10
             timeoutSeconds: 5
+          env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_INITDB_ROOT_PASSWORD
+                  name: mongo-userpass
+
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_INITDB_ROOT_USERNAME
+                  name: mongo-userpass
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-data
         - name: mongo-init
-          image: git.me.com:5050/mongo:latest
+          image: git.me.com:5050/images/mongo:latest
           command:
             - bash
-            - /config/init-mongo.sh
+            - /config/init.sh
           env:
             - name: NAMESPACE
-              value: default
+              value: todo
             - name: SERVICE_NAME
-              value: mongo
+              value: mongodb
             - name: REPLICA_SET_NAME
               value: rs0
             - name: EXPECTED_MEMBERS
               value: "2"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_INITDB_ROOT_PASSWORD
+                  name: mongo-userpass
+
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_INITDB_ROOT_USERNAME
+                  name: mongo-userpass
+
           volumeMounts:
             - mountPath: /config
               name: init
