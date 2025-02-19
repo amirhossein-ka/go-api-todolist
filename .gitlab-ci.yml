@@ -50,6 +50,6 @@ deploy-dev:
     - chmod +x /usr/local/bin/argocd
     - echo pre script done.
   script:
-    - argocd login $ARGOCD_SERVER --insecure --plaintext --username $ARGOCD_USER  --password $ARGOCD_TOKEN 
+    - argocd login $ARGOCD_SERVER --insecure --username $ARGOCD_USER  --password $ARGOCD_TOKEN 
     - argocd app sync moz
     - argocd app wait moz
