@@ -48,6 +48,6 @@ deploy-dev:
     - apk add --no-cache curl
     - curl -k -sSL -o /usr/local/bin/argocd https://${ARGOCD_SERVER}/download/argocd-linux-amd64
   script:
-    - argocd login $ARGOCD_SERVER --insecure --username $ARGOCD_USER --password $ARGOCD_TOKEN
+    - argocd login $ARGOCD_SERVER --insecure --username $ARGOCD_USER --password $ARGOCD_TOKEN --plaintext
     - argocd app sync moz
     - argocd app wait moz
