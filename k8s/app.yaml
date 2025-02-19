@@ -7,6 +7,11 @@ metadata:
     app: todo
     type: api
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
   replicas: 2
   selector:
     matchLabels:
@@ -23,6 +28,8 @@ spec:
       containers:
         - name: todo-api
           image: git.me.com:5050/cicd/go-api-todolist/main
+          imagePullPolicy: Always
+
           livenessProbe:
             httpGet:
               port: 8000
