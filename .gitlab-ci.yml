@@ -11,6 +11,7 @@ workflow:
 stages:
   - format
   - build
+  - deploy
 
 variables:
   TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
@@ -39,3 +40,14 @@ build-job:
     - docker build --build-arg HTTP_PROXY=$SOCKS_PROXY --build-arg HTTPS_PROXY=$SOCKS_PROXY -t $TAG_COMMIT -t $TAG_LATEST .
     - docker push $TAG_COMMIT
     - docker push $TAG_LATEST
+
+deploy-dev:
+  stage: deploy
+  image: alpine
+  before_script:
+    - apk add --no-cache curl
+    - curl -sSL -o /usr/local/bin/argocd https://${ARGOCD_SERVER}/download/argocd-linux-amd64
+  script:
+    - argocd login $ARGOCD_SERVER --insecure --username admin --password $ARGOCD_TOKEN
+    - argocd app sync moz
+    - argocd app wait moz
