@@ -40,6 +40,7 @@ func New(ctx context.Context, cfg *config.Database) (repository.MongoDB, error) 
 
 	// Doing a 3 time retry for connecting to database, each time with 5,10,15 sec wait
 	for i := 0; err != nil || i == 0; i++ {
+		log.Printf("mongodb connect try %d", i)
 		repo, err = connect()
 		if err != nil {
 			log.Println(err)
