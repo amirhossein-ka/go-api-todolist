@@ -56,7 +56,8 @@ func New(ctx context.Context, cfg *config.Database) (repository.MongoDB, error) 
 }
 
 func uri(cfg *config.Database) string {
-	return strings.Replace(cfg.Url, "<password>", url.QueryEscape(cfg.Password), 1)
+	tmp := strings.Replace(cfg.Url, "<password>", url.QueryEscape(cfg.Password), 1)
+	return strings.Replace(tmp, "<user>", url.QueryEscape(cfg.Username), 1)
 }
 
 func NewMongoContext(ctx context.Context) (context.Context, context.CancelFunc) {

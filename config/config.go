@@ -8,6 +8,7 @@ type (
 	Database struct {
 		Url        string
 		Password   string
+		Username   string
 		DB         string
 		Collection string
 	}

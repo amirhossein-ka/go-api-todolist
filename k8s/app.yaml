@@ -12,7 +12,7 @@ spec:
     rollingUpdate:
       maxSurge: 50%
       maxUnavailable: 50%
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: todo
@@ -27,7 +27,7 @@ spec:
         - name: git.me.com
       containers:
         - name: todo-api
-          image: git.me.com:5050/cicd/go-api-todolist/main
+          image: git.me.com:5050/cicd/go-api-todolist
           imagePullPolicy: Always
 
           livenessProbe:
