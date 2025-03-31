@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+{{/*  name: {{printf "%s-%s" (include "go-api-helm.name" . ) "config" | quote}}*/}}
+  name: {{include "go-api-helm.name" . | printf "%s-config" | quote}}
+  labels:
+    {{- include "go-api-helm.labels" . | nindent 4}}
+data:
+  DATABASE_DB: {{ .Values.mongodb.auth.databases 0 | quote }}
+  DATABASE_COLLECTION: {{ .Values.appMongoCollection | quote }}
