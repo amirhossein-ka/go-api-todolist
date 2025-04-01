@@ -6,5 +6,6 @@ metadata:
   labels:
     {{- include "go-api-helm.labels" . | nindent 4}}
 data:
-  DATABASE_DB: {{ .Values.mongodb.auth.databases 0 | quote }}
+  DATABASE_DB: {{ index .Values.mongodb.auth.databases 0 | quote }}
   DATABASE_COLLECTION: {{ .Values.appMongoCollection | quote }}
+  DATABASE_URL: "mongodb://<user>:<password>@{{.Release.Name}}-mongodb-headless/?retryWrites=true&w=majority"

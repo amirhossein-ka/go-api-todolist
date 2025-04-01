@@ -25,7 +25,7 @@ spec:
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 10 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -47,6 +47,32 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          env:
+            - name: DATABASE_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "go-api-helm.name" . | printf "%s-config" | quote }}
+                  key: DATABASE_DB
+            - name: DATABASE_COLLECTION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "go-api-helm.name" . | printf "%s-config" | quote }}
+                  key: DATABASE_COLLECTION
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "go-api-helm.name" . | printf "%s-config" | quote }}
+                  key: DATABASE_URL
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "go-api-helm.name" . | printf "%s-secret" | quote }}
+                  key: DATABASE_USERNAME
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "go-api-helm.name" . | printf "%s-secret" | quote }}
+                  key: DATABASE_PASSWORD
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
