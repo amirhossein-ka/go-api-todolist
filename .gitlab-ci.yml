@@ -50,5 +50,6 @@ deploy-dev:
     - chmod +x /usr/local/bin/argocd
     - echo pre script done.
   script:
-    - argocd app sync argocd/moz --insecure
-    - argocd app wait argocd/moz --insecure
+    - argocd app set $ARGO_APP_NAME --insecure --helm-set image.tag=$CI_COMMIT_SHORT_SHA
+    - argocd app sync $ARGO_APP_NAME --insecure
+    - argocd app wait  $ARGO_APP_NAME --insecure

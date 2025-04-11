@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: todo-mongo
+spec:
+  serviceName: mongo
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todo-db
+  template:
+    metadata:
+      labels:
+        app: todo-db
+    spec:
+      containers:
+        - name: mongodb
+          image: 192.168.1.34:5000/mongo:5
+          command:
+            - mongod
+            - --replSet
+            - rs0
+            - --bind_ip
+            - "0.0.0.0"
+          ports:
+            - name: mongo
+              containerPort: 27017
+          livenessProbe:
+            exec:
+              command:
+                - /usr/bin/mongo
+                - --eval
+                - db.serverStatus()
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+            - name: config
+              mountPath: /config
+          envFrom:
+            - secretRef:
+                name: mongo-userpass
+        # This container wait for other pods, and add them to a replica set in mongo, then sleeps.......Zzzzz
+        - name: mongo-init
+          image: 192.168.1.34:5000/mongo:5
+          command:
+            - bash
+            - /config/init.sh
+          env:
+            - name: NAMESPACE
+              value: default
+            - name: SERVICE_NAME
+              value: mongo
+            - name: REPLICA_SET_NAME
+              value: rs0
+            - name: EXPECTED_MEMBERS
+              value: "3"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: "mongo-init"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: todo-api-hostpath
+        resources:
+          requests:
+            storage: 2Gi

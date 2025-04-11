@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app
+  labels:
+    app: todo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      name: todo-api
+      labels:
+        app: todo
+    spec:
+      containers:
+        - name: todo-api
+          image: 192.168.1.34:5000/todo-app:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: todo-app-config
+            - secretRef:
+                name: mongo-userpass
+          resources:
+            limits:
+              memory: 386Mi
+              cpu: 500m
+            requests:
+              memory: 15Mi
+              cpu: 10m
